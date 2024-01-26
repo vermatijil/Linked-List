@@ -1,0 +1,65 @@
+#include <iostream>
+#include <vector>
+#include "Main.cpp"
+#include <queue>
+
+using namespace std;
+
+Node<int> *printPendingNodes(vector<Node<int> *> ans)
+{
+    priority_queue<int, vector<int>, greater<int>> pendingNodes;
+    for (int i = 0; i < ans.size(); i++)
+    {
+        pendingNodes.push(ans[i]->data);
+    }
+    Node<int> *dummy = new Node<int>(-1);
+    Node<int> *temp = dummy;
+    while (pendingNodes.size() != 0)
+    {
+        Node<int> *newNode = new Node<int>(pendingNodes.top());
+        pendingNodes.pop();
+        temp->link = newNode;
+        temp = newNode;
+    }
+    return dummy->link;
+}
+
+vector<Node<int> *> TakeInputAddress()
+{
+    vector<Node<int> *> ans;
+    int data;
+    cin >> data;
+    Node<int> *head = NULL;
+    Node<int> *tail = NULL;
+    while (data != -1)
+    {
+        Node<int> *newNode = new Node<int>(data);
+        if (head == NULL and tail == NULL)
+        {
+            head = newNode;
+            tail = newNode;
+        }
+        else
+        {
+            tail->link = newNode;
+            tail = newNode;
+        }
+        ans.push_back(tail);
+        cin >> data;
+    }
+    return ans;
+}
+
+int main()
+{
+    int t;
+    cin >> t;
+    while (t--)
+    {
+        vector<Node<int> *> ans = TakeInputAddress();
+        Node<int> *newLinkedList = printPendingNodes(ans);
+        printLinkedList(newLinkedList);
+        cout << endl;
+    }
+    return 0;
+}
